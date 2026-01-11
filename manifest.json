@@ -2,8 +2,8 @@
 	"domain": "meal_ha",
 	"name": "Meal HA",
 	"version": "0.0.1",
-	"documentation": "https://github.com/ton-github/meal-ha",
+	"documentation": "https://github.com/weylin91/planning-meal-ha",
 	"requirements": [],
 	"dependencies": [],
-	"codeowners": ["@ton-github"]
+	"codeowners": ["@weylin91"]
 }
