@@ -8,6 +8,7 @@ DOMAIN = "meal_ha"
 
 from .db import init_db
 from .food_library import FoodLibrary
+from homeassistant.helpers.discovery import async_load_platform
 
 async def async_setup(hass, config):
     """Initialisation du composant."""
@@ -16,7 +17,7 @@ async def async_setup(hass, config):
     init_db(hass)
 
     # Déclare la plateforme sensor pour la liste des ingrédients
-    hass.helpers.discovery.load_platform("sensor", DOMAIN, {}, config)
+    hass.async_create_task(async_load_platform(hass, "sensor", DOMAIN, {}, config))
 
     # Service pour ajouter un ingrédient
     async def handle_add_food(call):
