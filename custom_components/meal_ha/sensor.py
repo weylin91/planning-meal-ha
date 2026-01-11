@@ -3,16 +3,14 @@ from .food_library import FoodLibrary
 from .const import DOMAIN
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
-    async_add_entities([MealIngredientsSensor(hass)], True)
+    async_add_entities([FoodListSensor(hass)], True)
 
-class MealIngredientsSensor(SensorEntity):
+class FoodListSensor(SensorEntity):
     _attr_name = "Liste des ingrédients"
     _attr_icon = "mdi:food"
 
     def __init__(self, hass):
         self.hass = hass
-        self._state = None
-        self._attributes = {}
 
     @property
     def native_value(self):

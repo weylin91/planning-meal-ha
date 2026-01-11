@@ -1,28 +1,27 @@
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-
-from .const import DOMAIN, PLATFORMS
+from .const import DOMAIN
 from .db import init_db
 from .food_library import FoodLibrary
+from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
+from homeassistant.helpers.discovery import async_load_platform
 
 async def async_setup(hass: HomeAssistant, config: dict):
-    hass.data.setdefault(DOMAIN, {})
-    return True
-
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
+    # Initialisation de la BDD et FoodLibrary
     init_db(hass)
+    hass.data[DOMAIN] = FoodLibrary(hass)
 
-    hass.data[DOMAIN][entry.entry_id] = FoodLibrary(hass)
+    # Déclaration du sensor
+    hass.async_create_task(async_load_platform(hass, SENSOR_DOMAIN, DOMAIN, {}, config))
 
-    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-
+    # Service pour ajouter un ingrédient
     async def handle_add_food(call):
         name = call.data.get("name")
         if name:
-            hass.data[DOMAIN][entry.entry_id].add_food(name)
+            hass.data[DOMAIN].add_food(name)
 
+    # Service pour lister les ingrédients (logs)
     async def handle_list_foods(call):
-        foods = hass.data[DOMAIN][entry.entry_id].list_foods()
+        foods = hass.data[DOMAIN].list_foods()
         msg = (
             "Ingrédients : " + ", ".join(f"{fid}: {name}" for fid, name in foods)
             if foods
@@ -33,9 +32,4 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     hass.services.async_register(DOMAIN, "add_food", handle_add_food)
     hass.services.async_register(DOMAIN, "list_foods", handle_list_foods)
 
-    return True
-
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
-    await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
-    hass.data[DOMAIN].pop(entry.entry_id)
     return True
