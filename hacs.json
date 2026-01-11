@@ -1,8 +1,5 @@
 {
 	"name": "Meal HA",
-	"content_in_root": false,
-	"domains": ["meal_ha"],
 	"country": "FR",
-	"homeassistant": ">=2023.0.0",
-	"version": "0.0.1"
+	"render_readme": true
 }
