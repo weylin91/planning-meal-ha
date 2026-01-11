@@ -1,32 +1,27 @@
 from homeassistant.components.sensor import SensorEntity
-from homeassistant.core import HomeAssistant
-from homeassistant.config_entries import ConfigEntry
-
+from .food_library import FoodLibrary
 from .const import DOMAIN
 
-async def async_setup_entry(
-    hass: HomeAssistant,
-    entry: ConfigEntry,
-    async_add_entities
-):
-    food_lib = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities([MealIngredientsSensor(food_lib)], True)
+async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
+    async_add_entities([MealIngredientsSensor(hass)], True)
 
 class MealIngredientsSensor(SensorEntity):
-    _attr_name = "Meal Ingredients"
+    _attr_name = "Liste des ingrédients"
     _attr_icon = "mdi:food"
 
-    def __init__(self, food_lib):
-        self.food_lib = food_lib
+    def __init__(self, hass):
+        self.hass = hass
+        self._state = None
+        self._attributes = {}
 
     @property
     def native_value(self):
-        foods = self.food_lib.list_foods()
+        food_lib = FoodLibrary(self.hass)
+        foods = food_lib.list_foods()
         return len(foods)
 
     @property
     def extra_state_attributes(self):
-        foods = self.food_lib.list_foods()
-        return {
-            "ingredients": {fid: name for fid, name in foods}
-        }
+        food_lib = FoodLibrary(self.hass)
+        foods = food_lib.list_foods()
+        return {"ingredients": {fid: name for fid, name in foods}}
