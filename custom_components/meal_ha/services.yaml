@@ -1,0 +1,10 @@
+add_food:
+  name: Ajouter un ingrédient
+  fields:
+    name:
+      required: true
+      selector:
+        text:
+
+list_foods:
+  name: Lister les ingrédients

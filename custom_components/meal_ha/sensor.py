@@ -1,34 +1,32 @@
-"""
-Sensor personnalisé pour afficher la liste des ingrédients dans Home Assistant.
-"""
-from homeassistant.helpers.entity import Entity
-from .food_library import FoodLibrary
+from homeassistant.components.sensor import SensorEntity
+from homeassistant.core import HomeAssistant
+from homeassistant.config_entries import ConfigEntry
+
 from .const import DOMAIN
 
-async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
-    async_add_entities([FoodListSensor(hass)], True)
+async def async_setup_entry(
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    async_add_entities
+):
+    food_lib = hass.data[DOMAIN][entry.entry_id]
+    async_add_entities([MealIngredientsSensor(food_lib)], True)
 
-class FoodListSensor(Entity):
-    def __init__(self, hass):
-        self._hass = hass
-        self._state = None
-        self._attributes = {}
-        self._name = "Liste des ingrédients"
+class MealIngredientsSensor(SensorEntity):
+    _attr_name = "Meal Ingredients"
+    _attr_icon = "mdi:food"
+
+    def __init__(self, food_lib):
+        self.food_lib = food_lib
 
     @property
-    def name(self):
-        return self._name
-
-    @property
-    def state(self):
-        return self._state
+    def native_value(self):
+        foods = self.food_lib.list_foods()
+        return len(foods)
 
     @property
     def extra_state_attributes(self):
-        return self._attributes
-
-    async def async_update(self):
-        food_lib = FoodLibrary(self._hass)
-        foods = food_lib.list_foods()
-        self._state = len(foods)
-        self._attributes = {str(fid): name for fid, name in foods}
+        foods = self.food_lib.list_foods()
+        return {
+            "ingredients": {fid: name for fid, name in foods}
+        }
