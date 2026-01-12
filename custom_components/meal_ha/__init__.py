@@ -11,13 +11,15 @@ async def async_setup(hass: HomeAssistant, config: dict):
     await hass.http.async_register_static_paths([
         StaticPathConfig("/meal_ha-panel", str(hass.config.path("custom_components/meal_ha/www")), False)
     ])
-    hass.components.frontend.async_register_built_in_panel(
-        component_name="iframe",
-        sidebar_title="Meal HA",
-        sidebar_icon="mdi:food",
-        frontend_url_path="meal_ha-panel",
-        config={"url": "/meal_ha-panel/meal_ha_panel.html"},
-        require_admin=False
+    hass.async_create_task(
+        hass.helpers.frontend.async_register_built_in_panel(
+            component_name="iframe",
+            sidebar_title="Meal HA",
+            sidebar_icon="mdi:food",
+            frontend_url_path="meal_ha-panel",
+            config={"url": "/meal_ha-panel/meal_ha_panel.html"},
+            require_admin=False
+        )
     )
     # Initialisation de la BDD et FoodLibrary
     init_db(hass)
