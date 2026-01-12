@@ -6,6 +6,20 @@ from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
 from homeassistant.helpers.discovery import async_load_platform
 
 async def async_setup(hass: HomeAssistant, config: dict):
+        # Panel embarqué Meal HA
+        hass.http.register_static_path(
+            "/meal_ha-panel",
+            hass.config.path("custom_components/meal_ha/www"),
+            cache_headers=False
+        )
+        hass.components.frontend.async_register_built_in_panel(
+            component_name="iframe",
+            sidebar_title="Meal HA",
+            sidebar_icon="mdi:food",
+            frontend_url_path="meal_ha-panel",
+            config={"url": "/meal_ha-panel/meal_ha_panel.html"},
+            require_admin=False
+        )
     # Initialisation de la BDD et FoodLibrary
     init_db(hass)
     hass.data[DOMAIN] = FoodLibrary(hass)
