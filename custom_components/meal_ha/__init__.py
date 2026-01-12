@@ -7,7 +7,7 @@ from homeassistant.helpers.discovery import async_load_platform
 
 async def async_setup(hass: HomeAssistant, config: dict):
     # Panel embarqué Meal HA
-    hass.http.register_static_path(
+    await hass.http.async_register_static_path(
         "/meal_ha-panel",
         hass.config.path("custom_components/meal_ha/www"),
         cache_headers=False
