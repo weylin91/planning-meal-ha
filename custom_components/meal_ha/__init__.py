@@ -4,13 +4,13 @@ from .db import init_db
 from .food_library import FoodLibrary
 from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
 from homeassistant.helpers.discovery import async_load_platform
+from homeassistant.components.http import StaticPathConfig
 
 async def async_setup(hass: HomeAssistant, config: dict):
     # Panel embarqué Meal HA
-    await hass.http.async_register_static_paths(
-        "/meal_ha-panel",
-        hass.config.path("custom_components/meal_ha/www")
-    )
+    await hass.http.async_register_static_paths([
+        StaticPathConfig("/meal_ha-panel", str(hass.config.path("custom_components/meal_ha/www")), False)
+    ])
     hass.components.frontend.async_register_built_in_panel(
         component_name="iframe",
         sidebar_title="Meal HA",
