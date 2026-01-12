@@ -9,8 +9,7 @@ async def async_setup(hass: HomeAssistant, config: dict):
     # Panel embarqué Meal HA
     await hass.http.async_register_static_paths(
         "/meal_ha-panel",
-        hass.config.path("custom_components/meal_ha/www"),
-        cache_headers=False
+        hass.config.path("custom_components/meal_ha/www")
     )
     hass.components.frontend.async_register_built_in_panel(
         component_name="iframe",
