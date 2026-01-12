@@ -10,15 +10,15 @@ from homeassistant.components.frontend import async_register_built_in_panel
 async def async_setup(hass: HomeAssistant, config: dict):
     # Panel embarqué Meal HA
     await hass.http.async_register_static_paths([
-        StaticPathConfig("/meal_ha-panel", str(hass.config.path("custom_components/meal_ha/www")), False)
+        StaticPathConfig("/local/meal_ha", str(hass.config.path("custom_components/meal_ha/www")), False)
     ])
     async_register_built_in_panel(
         hass,
         component_name="iframe",
         sidebar_title="Meal HA",
         sidebar_icon="mdi:food",
-        frontend_url_path="meal_ha-panel",
-        config={"url": "/meal_ha-panel/meal_ha_panel.html"},
+        frontend_url_path="meal_ha",
+        config={"url": "/local/meal_ha/index.html"},
         require_admin=False
     )
     # Initialisation de la BDD et FoodLibrary
