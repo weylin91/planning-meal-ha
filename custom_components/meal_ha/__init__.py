@@ -5,21 +5,21 @@ from .food_library import FoodLibrary
 from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
 from homeassistant.helpers.discovery import async_load_platform
 from homeassistant.components.http import StaticPathConfig
+from homeassistant.components.frontend import async_register_built_in_panel
 
 async def async_setup(hass: HomeAssistant, config: dict):
     # Panel embarqué Meal HA
     await hass.http.async_register_static_paths([
         StaticPathConfig("/meal_ha-panel", str(hass.config.path("custom_components/meal_ha/www")), False)
     ])
-    hass.async_create_task(
-        hass.helpers.frontend.async_register_built_in_panel(
-            component_name="iframe",
-            sidebar_title="Meal HA",
-            sidebar_icon="mdi:food",
-            frontend_url_path="meal_ha-panel",
-            config={"url": "/meal_ha-panel/meal_ha_panel.html"},
-            require_admin=False
-        )
+    async_register_built_in_panel(
+        hass,
+        component_name="iframe",
+        sidebar_title="Meal HA",
+        sidebar_icon="mdi:food",
+        frontend_url_path="meal_ha-panel",
+        config={"url": "/meal_ha-panel/meal_ha_panel.html"},
+        require_admin=False
     )
     # Initialisation de la BDD et FoodLibrary
     init_db(hass)
