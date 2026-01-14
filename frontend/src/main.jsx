@@ -1,6 +1,5 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import queryClient from "@/utils/react-query";
 import "@fontsource/roboto";
 // Specify weight
 import "@fontsource/roboto/400-italic.css";
@@ -12,6 +11,7 @@ import { StyledEngineProvider } from "@mui/material/styles";
 import { QueryClientProvider } from "@tanstack/react-query";
 import App from "./App.jsx";
 import darkTheme from "./utils/DarkTheme.jsx";
+import queryClient from "./utils/react-query";
 
 // Specify weight and style
 
