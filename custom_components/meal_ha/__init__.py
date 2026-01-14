@@ -1,17 +1,26 @@
 from homeassistant.core import HomeAssistant
-from .const import DOMAIN
-from .db import init_db
-from .food_library import FoodLibrary
 from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
 from homeassistant.helpers.discovery import async_load_platform
 from homeassistant.components.http import StaticPathConfig
 from homeassistant.components.frontend import async_register_built_in_panel
 
+from .const import DOMAIN
+from .db import init_db
+from .food_library import FoodLibrary
+from .api import MealHAFoodsView
+
+
 async def async_setup(hass: HomeAssistant, config: dict):
-    # Panel embarqué Meal HA
+    # Fichiers statiques
     await hass.http.async_register_static_paths([
-        StaticPathConfig("/local/meal_ha", str(hass.config.path("custom_components/meal_ha/www")), False)
+        StaticPathConfig(
+            "/local/meal_ha",
+            str(hass.config.path("custom_components/meal_ha/www")),
+            False,
+        )
     ])
+
+    # Panel iframe
     async_register_built_in_panel(
         hass,
         component_name="iframe",
@@ -19,29 +28,19 @@ async def async_setup(hass: HomeAssistant, config: dict):
         sidebar_icon="mdi:food",
         frontend_url_path="meal_ha",
         config={"url": "/local/meal_ha/index.html"},
-        require_admin=False
+        require_admin=False,
     )
-    # Initialisation de la BDD et FoodLibrary
+
+    # Init BDD + lib
     init_db(hass)
     hass.data[DOMAIN] = FoodLibrary(hass)
 
-    # Déclaration du sensor
-    hass.async_create_task(async_load_platform(hass, SENSOR_DOMAIN, DOMAIN, {}, config))
+    # Sensor
+    hass.async_create_task(
+        async_load_platform(hass, SENSOR_DOMAIN, DOMAIN, {}, config)
+    )
 
-    # Service pour ajouter un ingrédient
-    async def handle_add_food(call):
-        name = call.data.get("name")
-        if name:
-            hass.data[DOMAIN].add_food(name)
-
-
-    async def async_list_foods(call):
-        library = FoodLibrary(hass)
-        foods = library.list_foods()
-        # Fire an event with the foods list instead of returning it
-        hass.bus.async_fire(f"{DOMAIN}_foods_listed", {"foods": foods})
-
-    hass.services.async_register(DOMAIN, "add_food", handle_add_food)
-    hass.services.async_register(DOMAIN, "list_foods", async_list_foods)
+    # Routes API
+    hass.http.register_view(MealHAFoodsView)
 
     return True
