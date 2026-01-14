@@ -24,7 +24,9 @@ def init_db(hass):
     CREATE TABLE IF NOT EXISTS dishes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL UNIQUE,
-        nb_meal INTEGER DEFAULT 1
+        category TEXT NOT NULL,
+        nb_meal INTEGER DEFAULT 1,
+        type TEXT DEFAULT 'dish'
     )
     """)
     # Table de liaison entre plats et ingrédients

@@ -8,10 +8,16 @@ export const useIngredient = () => {
   return useQuery({
     queryKey: ["ingredients"],
     queryFn: getIngredients,
+    select: (data) => (Array.isArray(data) ? data : data.foods || []),
   });
 };
 
 export const getIngredients = async () => {
-  const { data } = await axios.get("/api/meal_ha/foods");
+  const { data } = await axios.get("/api/meal_ha/list_foods");
+  return data;
+};
+
+export const setNewIngredient = async (info) => {
+  const { data } = await axios.post("/api/meal_ha/add_food", info);
   return data;
 };

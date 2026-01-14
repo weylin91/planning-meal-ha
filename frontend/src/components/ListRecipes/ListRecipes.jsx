@@ -182,8 +182,9 @@ const AddRecipe = ({
   const formik = useFormik({
     initialValues: {
       title: "",
-      type: "",
+      category: "",
       nbMeals: 1,
+      type: "dish",
       products: [],
     },
     onSubmit: (values) => {
@@ -198,18 +199,15 @@ const AddRecipe = ({
     if (selectedRecipe) {
       formik.setValues({
         title: selectedRecipe.title,
-        type: selectedRecipe.type,
+        category: selectedRecipe.category,
         nbMeals: selectedRecipe.nbMeals ?? 1,
+        type: selectedRecipe.type ?? "main",
         products: selectedRecipe.products,
       });
     } else {
       formik.resetForm();
     }
   }, [selectedRecipe]);
-
-  const handleChangeType = (type) => {
-    formik.setFieldValue("type", type);
-  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -236,16 +234,18 @@ const AddRecipe = ({
                 onBlur={formik.handleBlur}
               />
             </Grid>
-            <Grid size={{ xs: 6, mb: 2 }}>
+            <Grid size={{ xs: 4, mb: 2 }}>
               <Typography
                 variant="body2"
                 sx={{ mb: 1, textTransform: "uppercase" }}
               >
-                Type :
+                Catégorie :
               </Typography>
               <Select
-                value={formik.values.type}
-                onChange={(e) => handleChangeType(e.target.value)}
+                value={formik.values.category}
+                onChange={(e) =>
+                  formik.setFieldValue("category", e.target.value)
+                }
                 onBlur={formik.handleBlur}
                 fullWidth
                 size="small"
@@ -257,7 +257,27 @@ const AddRecipe = ({
                 <MenuItem value="Fast food">Fast food</MenuItem>
               </Select>
             </Grid>
-            <Grid size={{ xs: 6, mb: 2 }}>
+            <Grid size={{ xs: 4, mb: 2 }}>
+              <Typography
+                variant="body2"
+                sx={{ mb: 1, textTransform: "uppercase" }}
+              >
+                Catégorie :
+              </Typography>
+              <Select
+                value={formik.values.category}
+                onChange={(e) =>
+                  formik.setFieldValue("category", e.target.value)
+                }
+                onBlur={formik.handleBlur}
+                fullWidth
+                size="small"
+              >
+                <MenuItem value="dish">Plât</MenuItem>
+                <MenuItem value="side">Accompagnement</MenuItem>
+              </Select>
+            </Grid>
+            <Grid size={{ xs: 4, mb: 2 }}>
               <Typography
                 variant="body2"
                 sx={{ mb: 1, textTransform: "uppercase" }}
@@ -273,6 +293,30 @@ const AddRecipe = ({
                   formik.setFieldValue("nbMeals", e.target.value)
                 }
                 onBlur={formik.handleBlur}
+                inputProps={{
+                  style: { MozAppearance: 'textfield' },
+                  inputMode: 'numeric',
+                  pattern: '[0-9]*',
+                  min: 1,
+                  // Hide spin buttons for Chrome, Safari, Edge, Opera
+                  sx: {
+                    '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
+                      WebkitAppearance: 'none',
+                      margin: 0,
+                    },
+                  },
+                }}
+                sx={{
+                  // Hide spin buttons for Chrome, Safari, Edge, Opera
+                  '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
+                    WebkitAppearance: 'none',
+                    margin: 0,
+                  },
+                  // Hide spin buttons for Firefox
+                  '& input[type=number]': {
+                    MozAppearance: 'textfield',
+                  },
+                }}
               />
             </Grid>
             <Grid size={{ xs: 12, mb: 2 }}>
