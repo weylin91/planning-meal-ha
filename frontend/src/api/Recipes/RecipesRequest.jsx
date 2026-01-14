@@ -13,11 +13,15 @@ export const useIngredient = () => {
 };
 
 export const getIngredients = async () => {
-  const { data } = await axios.get("/api/meal_ha/list_foods");
+  const { data } = await axios.get("/api/meal_ha/foods", {
+    withCredentials: true, // ← ENVOIE les cookies de session
+  });
   return data;
 };
 
 export const setNewIngredient = async (info) => {
-  const { data } = await axios.post("/api/meal_ha/add_food", info);
+  const { data } = await axios.post("/api/meal_ha/foods", info, {
+    withCredentials: true, // ← ENVOIE les cookies de session
+  });
   return data;
 };
