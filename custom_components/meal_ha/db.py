@@ -23,7 +23,7 @@ def init_db(hass):
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS dishes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL UNIQUE
+        name TEXT NOT NULL UNIQUE,
         nbMeal INTEGER DEFAULT 1
     )
     """)
