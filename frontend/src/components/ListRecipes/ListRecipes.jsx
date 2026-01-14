@@ -1,6 +1,5 @@
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
-import { useIngredient } from "@/api";
 import { DeleteForever, List, Settings } from "@mui/icons-material";
 import {
   Box,
@@ -33,6 +32,7 @@ import {
 } from "@mui/material";
 import { amber } from "@mui/material/colors";
 import { useQueryClient } from "@tanstack/react-query";
+import { useIngredient } from "../../api/Recipes/RecipesRequest.jsx";
 
 const ListRecipes = () => {
   const [openNewRecipe, setOpenNewRecipe] = useState(false);
