@@ -5,7 +5,10 @@ import { useQuery } from "@tanstack/react-query";
  * Custom hook to fetch ingredients with an optional filter.
  */
 export const useIngredient = () => {
-  return useQuery(["ingredients"], () => getIngredients());
+  return useQuery({
+    queryKey: ["ingredients"],
+    queryFn: getIngredients,
+  });
 };
 
 export const getIngredients = async () => {

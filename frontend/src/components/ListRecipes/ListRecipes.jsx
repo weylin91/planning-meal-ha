@@ -171,20 +171,10 @@ const AddRecipe = ({
   selectedRecipe,
   setSelectedRecipe,
 }) => {
-  let ingredients = [
-    { id: 1, libelle: "Spaghetti" },
-    { id: 2, libelle: "Viande hachée" },
-    { id: 3, libelle: "Sauce tomate" },
-    { id: 4, libelle: "Laitue" },
-    { id: 5, libelle: "Poulet grillé" },
-    { id: 6, libelle: "Parmesan" },
-  ];
-  let isLoading = false;
-  if (process.env.NODE_ENV === "production") {
-    const { data: ingredients = [], isLoading } = useIngredient();
-    //const { mutate: newRecipe } = useNewRecipe();
-    //const { mutate: updateRecipe } = useUpdateRecipe(); // <-- crée ce hook si besoin
-  }
+  const { data: ingredients = [], isLoading } = useIngredient();
+  //const { mutate: newRecipe } = useNewRecipe();
+  //const { mutate: updateRecipe } = useUpdateRecipe(); // <-- crée ce hook si besoin
+
   const queryClient = useQueryClient();
 
   const [saisie, setSaisie] = useState("");
