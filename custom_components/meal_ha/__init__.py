@@ -34,17 +34,14 @@ async def async_setup(hass: HomeAssistant, config: dict):
         if name:
             hass.data[DOMAIN].add_food(name)
 
-    # Service pour lister les ingrédients (logs)
-    async def handle_list_foods(call):
-        foods = hass.data[DOMAIN].list_foods()
-        msg = (
-            "Ingrédients : " + ", ".join(f"{fid}: {name}" for fid, name in foods)
-            if foods
-            else "Aucun ingrédient trouvé."
-        )
-        hass.components.logger.info(msg)
+
+    async def async_list_foods(call):
+        library = FoodLibrary(hass)
+        foods = library.list_foods()
+        # Fire an event with the foods list instead of returning it
+        hass.bus.async_fire(f"{DOMAIN}_foods_listed", {"foods": foods})
 
     hass.services.async_register(DOMAIN, "add_food", handle_add_food)
-    hass.services.async_register(DOMAIN, "list_foods", handle_list_foods)
+    hass.services.async_register(DOMAIN, "list_foods", async_list_foods)
 
     return True

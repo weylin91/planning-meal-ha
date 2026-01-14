@@ -14,11 +14,11 @@ class DishManager:
         db_path = get_db_path(self.hass)
         with sqlite3.connect(db_path) as conn:
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO dishes (name) VALUES (?)", (name,))
+            cursor.execute("INSERT INTO dishes (name, nbMeal) VALUES (?, ?)", (name, 1))
             dish_id = cursor.lastrowid
             if ingredients:
                 for food_id, quantity in ingredients:
-                    cursor.execute("INSERT INTO dish_ingredients (dish_id, food_id, quantity) VALUES (?, ?, ?)", (dish_id, food_id, quantity))
+                    cursor.execute("INSERT INTO dish_ingredients (dish_id, food_id) VALUES (?, ?)", (dish_id, food_id))
             conn.commit()
         return dish_id
 
@@ -28,18 +28,18 @@ class DishManager:
         with sqlite3.connect(db_path) as conn:
             cursor = conn.cursor()
             if new_name:
-                cursor.execute("UPDATE dishes SET name = ? WHERE id = ?", (new_name, dish_id))
+                cursor.execute("UPDATE dishes SET name = ?, nbMeal = ? WHERE id = ?", (new_name, 1, dish_id))
             if new_ingredients is not None:
                 cursor.execute("DELETE FROM dish_ingredients WHERE dish_id = ?", (dish_id,))
-                for food_id, quantity in new_ingredients:
-                    cursor.execute("INSERT INTO dish_ingredients (dish_id, food_id, quantity) VALUES (?, ?, ?)", (dish_id, food_id, quantity))
+                for food_id in new_ingredients:
+                    cursor.execute("INSERT INTO dish_ingredients (dish_id, food_id) VALUES (?, ?)", (dish_id, food_id))
             conn.commit()
 
     def list_dishes(self):
         db_path = get_db_path(self.hass)
         with sqlite3.connect(db_path) as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT id, name FROM dishes")
+            cursor.execute("SELECT id, name, nbMeal FROM dishes")
             return cursor.fetchall()
 
     def get_ingredients(self, dish_id):
@@ -47,7 +47,7 @@ class DishManager:
         with sqlite3.connect(db_path) as conn:
             cursor = conn.cursor()
             cursor.execute("""
-                SELECT foods.id, foods.name, dish_ingredients.quantity
+                SELECT foods.id, foods.name
                 FROM dish_ingredients
                 JOIN foods ON dish_ingredients.food_id = foods.id
                 WHERE dish_ingredients.dish_id = ?

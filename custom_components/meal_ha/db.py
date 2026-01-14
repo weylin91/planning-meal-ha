@@ -24,6 +24,7 @@ def init_db(hass):
     CREATE TABLE IF NOT EXISTS dishes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL UNIQUE
+        nbMeal INTEGER DEFAULT 1
     )
     """)
     # Table de liaison entre plats et ingrédients
@@ -34,30 +35,6 @@ def init_db(hass):
         PRIMARY KEY (dish_id, food_id),
         FOREIGN KEY(dish_id) REFERENCES dishes(id),
         FOREIGN KEY(food_id) REFERENCES foods(id)
-    )
-    """)
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS calendar (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        date TEXT NOT NULL,
-        main_dish_id INTEGER,
-        side_dish_id INTEGER,
-        FOREIGN KEY(main_dish_id) REFERENCES dishes(id),
-        FOREIGN KEY(side_dish_id) REFERENCES dishes(id)
-    )
-    """)
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS shopping_lists (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL UNIQUE
-    )
-    """)
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS shopping_items (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        list_id INTEGER,
-        item TEXT NOT NULL,
-        FOREIGN KEY(list_id) REFERENCES shopping_lists(id)
     )
     """)
     

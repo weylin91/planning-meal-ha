@@ -13,7 +13,7 @@ class FoodLibrary:
         db_path = get_db_path(self.hass)
         with sqlite3.connect(db_path) as conn:
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO foods (name) VALUES (?)", (name,))
+            cursor.execute("INSERT INTO foods (name) VALUES (?)", (name))
             conn.commit()
 
     def update_food(self, food_id, new_name):
