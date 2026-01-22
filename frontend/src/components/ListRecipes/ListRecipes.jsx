@@ -348,7 +348,7 @@ const AddRecipe = ({
                 getOptionLabel={(option) =>
                   option && option.name ? option.name : ""
                 }
-                isOptionEqualToValue={(option, value) => option.id === value.id}
+                getOptionKey={(option) => option.id}
                 size="small"
                 value={formik.values.products}
                 onChange={(_, value) => formik.setFieldValue("products", value)}
