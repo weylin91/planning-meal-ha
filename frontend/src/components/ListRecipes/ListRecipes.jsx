@@ -47,9 +47,9 @@ const ListRecipes = () => {
         title: "Spaghetti Bolognese",
         type: "Plat principal",
         products: [
-          { id: 1, libelle: "Spaghetti" },
-          { id: 2, libelle: "Viande hachée" },
-          { id: 3, libelle: "Sauce tomate" },
+          { id: 1, name: "Spaghetti" },
+          { id: 2, name: "Viande hachée" },
+          { id: 3, name: "Sauce tomate" },
         ],
       },
       {
@@ -57,9 +57,9 @@ const ListRecipes = () => {
         title: "Salade César",
         type: "Entrée",
         products: [
-          { id: 4, libelle: "Laitue" },
-          { id: 5, libelle: "Poulet grillé" },
-          { id: 6, libelle: "Parmesan" },
+          { id: 4, name: "Laitue" },
+          { id: 5, name: "Poulet grillé" },
+          { id: 6, name: "Parmesan" },
         ],
       },
     ],
@@ -135,7 +135,7 @@ const RecetteItem = ({ recipe }) => {
           <Chip
             sx={{ mr: 1, mb: 1, mt: 1 }}
             key={product.id}
-            label={product.libelle}
+            label={product.name}
             size="small"
           />
         ))}
@@ -174,7 +174,7 @@ const AddRecipe = ({
   selectedRecipe,
   setSelectedRecipe,
 }) => {
-  const { data: ingredients = [], isLoading } = useIngredient();
+  const { data: ingredients, isLoading } = useIngredient();
   const isDev = process.env.NODE_ENV === "development";
   const mockIngredients = {
     foods: [{ id: 1, name: "Filet de poulet", category: "ingredient" }],
@@ -340,8 +340,8 @@ const AddRecipe = ({
               </Typography>
               <Autocomplete
                 multiple
-                options={ingredientsData.foods}
-                getOptionLabel={(option) => {console.log(option); return option.name}}
+                options={ingredientsData?.foods}
+                getOptionLabel={(option) => option.name}
                 getOptionKey={(option) => option.id}
                 size="small"
                 value={formik.values.products}
