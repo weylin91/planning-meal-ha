@@ -335,7 +335,9 @@ const AddRecipe = ({
               </Typography>
               <Autocomplete
                 multiple
-                options={ingredients.foods}
+                options={
+                  Array.isArray(ingredients.foods) ? ingredients.foods : []
+                }
                 getOptionLabel={(option) => option.name}
                 size="small"
                 value={formik.values.products}
