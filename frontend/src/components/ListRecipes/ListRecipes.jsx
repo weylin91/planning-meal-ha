@@ -32,7 +32,10 @@ import {
 } from "@mui/material";
 import { amber } from "@mui/material/colors";
 import { useQueryClient } from "@tanstack/react-query";
-import { useIngredient } from "../../api/Recipes/RecipesRequest.jsx";
+import {
+  setNewIngredient,
+  useIngredient,
+} from "../../api/Recipes/RecipesRequest.jsx";
 
 const ListRecipes = () => {
   const [openNewRecipe, setOpenNewRecipe] = useState(false);
@@ -294,27 +297,29 @@ const AddRecipe = ({
                 }
                 onBlur={formik.handleBlur}
                 inputProps={{
-                  style: { MozAppearance: 'textfield' },
-                  inputMode: 'numeric',
-                  pattern: '[0-9]*',
+                  style: { MozAppearance: "textfield" },
+                  inputMode: "numeric",
+                  pattern: "[0-9]*",
                   min: 1,
                   // Hide spin buttons for Chrome, Safari, Edge, Opera
                   sx: {
-                    '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
-                      WebkitAppearance: 'none',
-                      margin: 0,
-                    },
+                    "&::-webkit-outer-spin-button, &::-webkit-inner-spin-button":
+                      {
+                        WebkitAppearance: "none",
+                        margin: 0,
+                      },
                   },
                 }}
                 sx={{
                   // Hide spin buttons for Chrome, Safari, Edge, Opera
-                  '& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button': {
-                    WebkitAppearance: 'none',
-                    margin: 0,
-                  },
+                  "& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button":
+                    {
+                      WebkitAppearance: "none",
+                      margin: 0,
+                    },
                   // Hide spin buttons for Firefox
-                  '& input[type=number]': {
-                    MozAppearance: 'textfield',
+                  "& input[type=number]": {
+                    MozAppearance: "textfield",
                   },
                 }}
               />

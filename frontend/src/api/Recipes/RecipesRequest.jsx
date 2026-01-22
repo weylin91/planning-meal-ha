@@ -12,16 +12,31 @@ export const useIngredient = () => {
   });
 };
 
+const getApiUrl = () => {
+  const envUrl = import.meta.env.VITE_APP_API_URL;
+  if (envUrl && envUrl !== "") {
+    return envUrl;
+  }
+  // Si en production (build local), fallback sur localhost
+  return window.location.origin;
+};
+
 export const getIngredients = async () => {
-  const { data } = await axios.get("/api/meal_ha/foods", {
+  const { data } = await axios.get(`${getApiUrl()}/api/meal_ha/foods`, {
     withCredentials: true, // ← ENVOIE les cookies de session
+    headers: {
+      Authorization: `Bearer ${import.meta.env.VITE_APP_API_TOKEN}`,
+    },
   });
   return data;
 };
 
 export const setNewIngredient = async (info) => {
-  const { data } = await axios.post("/api/meal_ha/foods", info, {
+  const { data } = await axios.post(`${getApiUrl()}/api/meal_ha/foods`, info, {
     withCredentials: true, // ← ENVOIE les cookies de session
+    headers: {
+      Authorization: `Bearer ${import.meta.env.VITE_APP_API_TOKEN}`,
+    },
   });
   return data;
 };
