@@ -179,7 +179,6 @@ const AddRecipe = ({
   const mockIngredients = {
     foods: [{ id: 1, name: "Filet de poulet", category: "ingredient" }],
   };
-  const ingredientsData = isDev ? mockIngredients : ingredients;
   //const { mutate: newRecipe } = useNewRecipe();
   //const { mutate: updateRecipe } = useUpdateRecipe(); // <-- crée ce hook si besoin
 
@@ -221,6 +220,7 @@ const AddRecipe = ({
     return <div>Loading...</div>;
   }
 
+  const ingredientsData = isDev ? mockIngredients : ingredients;
   console.log("INGREDIENTS :", ingredientsData);
 
   return (
