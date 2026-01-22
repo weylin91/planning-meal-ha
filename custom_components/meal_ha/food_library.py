@@ -34,5 +34,8 @@ class FoodLibrary:
         db_path = get_db_path(self.hass)
         with sqlite3.connect(db_path) as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT id, name FROM foods")
+            cursor.execute("SELECT id, name, category FROM foods")
+            rows = cursor.fetchall()
+            foods = [{"id": row[0], "name": row[1], "category": row[2]} for row in rows]
+            return foods
             return cursor.fetchall()

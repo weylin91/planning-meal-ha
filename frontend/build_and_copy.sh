@@ -17,4 +17,5 @@ mkdir -p "$WWW_DIR"
 
 # Copie des fichiers buildés
 cp -r dist/* "$WWW_DIR/"
+
 echo "✅ Build copié dans $WWW_DIR"

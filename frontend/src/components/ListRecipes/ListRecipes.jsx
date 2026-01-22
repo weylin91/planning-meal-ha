@@ -333,8 +333,8 @@ const AddRecipe = ({
               </Typography>
               <Autocomplete
                 multiple
-                options={ingredients}
-                getOptionLabel={(option) => option.libelle}
+                options={ingredients.foods}
+                getOptionLabel={(option) => option.name}
                 size="small"
                 value={formik.values.products}
                 onChange={(_, value) => formik.setFieldValue("products", value)}
