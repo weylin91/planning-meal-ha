@@ -341,7 +341,7 @@ const AddRecipe = ({
               <Autocomplete
                 multiple
                 options={ingredientsData.foods}
-                getOptionLabel={(option) => option.name}
+                getOptionLabel={(option) => {console.log(option); return option.name}}
                 getOptionKey={(option) => option.id}
                 size="small"
                 value={formik.values.products}
