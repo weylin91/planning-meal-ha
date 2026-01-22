@@ -175,6 +175,11 @@ const AddRecipe = ({
   setSelectedRecipe,
 }) => {
   const { data: ingredients = [], isLoading } = useIngredient();
+  const isDev = process.env.NODE_ENV === "development";
+  const mockIngredients = {
+    foods: [{ id: 1, name: "Filet de poulet", category: "ingredient" }],
+  };
+  const ingredientsData = isDev ? mockIngredients : ingredients;
   //const { mutate: newRecipe } = useNewRecipe();
   //const { mutate: updateRecipe } = useUpdateRecipe(); // <-- crée ce hook si besoin
 
@@ -216,7 +221,7 @@ const AddRecipe = ({
     return <div>Loading...</div>;
   }
 
-  console.log("INGREDIENTS :", ingredients);
+  console.log("INGREDIENTS :", ingredientsData);
 
   return (
     <Dialog open={openNewRecipe} maxWidth="md" fullWidth={true}>
@@ -336,9 +341,14 @@ const AddRecipe = ({
               <Autocomplete
                 multiple
                 options={
-                  Array.isArray(ingredients.foods) ? ingredients.foods : []
+                  Array.isArray(ingredientsData.foods)
+                    ? ingredientsData.foods
+                    : []
                 }
-                getOptionLabel={(option) => option.name}
+                getOptionLabel={(option) =>
+                  option && option.name ? option.name : ""
+                }
+                isOptionEqualToValue={(option, value) => option.id === value.id}
                 size="small"
                 value={formik.values.products}
                 onChange={(_, value) => formik.setFieldValue("products", value)}
