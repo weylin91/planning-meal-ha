@@ -17,7 +17,8 @@ def init_db(hass):
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS foods (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL UNIQUE
+        name TEXT NOT NULL UNIQUE, 
+        category TEXT DEFAULT 'ingredient'
     )
     """)
     cursor.execute("""

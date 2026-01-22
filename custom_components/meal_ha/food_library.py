@@ -9,11 +9,11 @@ class FoodLibrary:
     def __init__(self, hass):
         self.hass = hass
 
-    def add_food(self, name):
+    def add_food(self, name, category):
         db_path = get_db_path(self.hass)
         with sqlite3.connect(db_path) as conn:
             cursor = conn.cursor()
-            cursor.execute("INSERT INTO foods (name) VALUES (?)", (name))
+            cursor.execute("INSERT INTO foods (name, category) VALUES (?, ?)", (name, category))
             conn.commit()
 
     def update_food(self, food_id, new_name):

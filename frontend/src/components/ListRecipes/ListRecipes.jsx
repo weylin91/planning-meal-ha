@@ -354,7 +354,7 @@ const AddRecipe = ({
                         e.preventDefault();
                         await setNewIngredient({
                           name: saisie,
-                          type: "ingredient",
+                          category: "ingredient",
                         }).then(() => {
                           queryClient.invalidateQueries(["ingredients"]);
                         });
