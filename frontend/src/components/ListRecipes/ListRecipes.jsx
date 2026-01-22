@@ -177,7 +177,7 @@ const AddRecipe = ({
   const { data: ingredients, isLoading } = useIngredient();
   const isDev = process.env.NODE_ENV === "development";
   const mockIngredients = {
-    foods: [{ id: 1, name: "Filet de poulet", category: "ingredient" }],
+    foods: [{ id: 1, name: "Filet de poulet" }],
   };
   //const { mutate: newRecipe } = useNewRecipe();
   //const { mutate: updateRecipe } = useUpdateRecipe(); // <-- crée ce hook si besoin
@@ -209,18 +209,10 @@ const AddRecipe = ({
         category: selectedRecipe.category,
         nbMeals: selectedRecipe.nbMeals ?? 1,
         type: selectedRecipe.type ?? "main",
-        products: Array.isArray(selectedRecipe.products)
-          ? selectedRecipe.products
-          : [],
+        products: selectedRecipe.products,
       });
     } else {
-      formik.setValues({
-        title: "",
-        category: "",
-        nbMeals: 1,
-        type: "dish",
-        products: [],
-      });
+      formik.resetForm();
     }
   }, [selectedRecipe]);
 
@@ -228,7 +220,7 @@ const AddRecipe = ({
     return <div>Loading...</div>;
   }
 
-  const ingredientsData = isDev ? mockIngredients : ingredients;
+  const ingredientsData = isDev ? mockIngredients : mockIngredients;
   console.log("INGREDIENTS :", ingredientsData);
 
   return (
@@ -354,13 +346,7 @@ const AddRecipe = ({
                 size="small"
                 value={
                   Array.isArray(formik.values.products)
-                    ? (formik.values.products || []).filter(
-                        (v) =>
-                          v &&
-                          typeof v === "object" &&
-                          "id" in v &&
-                          "name" in v,
-                      )
+                    ? formik.values.products
                     : []
                 }
                 onChange={(_, value) => formik.setFieldValue("products", value)}
