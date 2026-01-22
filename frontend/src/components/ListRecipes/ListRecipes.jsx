@@ -216,6 +216,8 @@ const AddRecipe = ({
     return <div>Loading...</div>;
   }
 
+  console.log("INGREDIENTS :", ingredients);
+
   return (
     <Dialog open={openNewRecipe} maxWidth="md" fullWidth={true}>
       <DialogTitle>Ajouter une recette</DialogTitle>
