@@ -36,6 +36,6 @@ class FoodLibrary:
             cursor = conn.cursor()
             cursor.execute("SELECT id, name, category FROM foods")
             rows = cursor.fetchall()
-            foods = [{"id": row[0], "name": row[1], "category": row[2]} for row in rows]
+            foods = [{"id": row[0], "name": row[1]} for row in rows]
             return foods
             return cursor.fetchall()

@@ -220,7 +220,7 @@ const AddRecipe = ({
     return <div>Loading...</div>;
   }
 
-  const ingredientsData = isDev ? mockIngredients : mockIngredients;
+  const ingredientsData = isDev ? mockIngredients : ingredients;
   console.log("INGREDIENTS :", ingredientsData);
 
   return (
