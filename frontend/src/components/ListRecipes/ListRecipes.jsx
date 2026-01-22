@@ -209,10 +209,18 @@ const AddRecipe = ({
         category: selectedRecipe.category,
         nbMeals: selectedRecipe.nbMeals ?? 1,
         type: selectedRecipe.type ?? "main",
-        products: selectedRecipe.products,
+        products: Array.isArray(selectedRecipe.products)
+          ? selectedRecipe.products
+          : [],
       });
     } else {
-      formik.resetForm();
+      formik.setValues({
+        title: "",
+        category: "",
+        nbMeals: 1,
+        type: "dish",
+        products: [],
+      });
     }
   }, [selectedRecipe]);
 
@@ -346,7 +354,13 @@ const AddRecipe = ({
                 size="small"
                 value={
                   Array.isArray(formik.values.products)
-                    ? formik.values.products
+                    ? (formik.values.products || []).filter(
+                        (v) =>
+                          v &&
+                          typeof v === "object" &&
+                          "id" in v &&
+                          "name" in v,
+                      )
                     : []
                 }
                 onChange={(_, value) => formik.setFieldValue("products", value)}
