@@ -344,7 +344,11 @@ const AddRecipe = ({
                 getOptionLabel={(option) => option.name}
                 getOptionKey={(option) => option.id}
                 size="small"
-                value={formik.values.products}
+                value={
+                  Array.isArray(formik.values.products)
+                    ? formik.values.products
+                    : []
+                }
                 onChange={(_, value) => formik.setFieldValue("products", value)}
                 renderInput={(params) => (
                   <TextField
