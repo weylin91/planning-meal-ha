@@ -174,7 +174,7 @@ const AddRecipe = ({
   selectedRecipe,
   setSelectedRecipe,
 }) => {
-  const { data: ingredients, isLoading } = useIngredient();
+  const { data: ingredients = [], isLoading } = useIngredient();
   const isDev = process.env.NODE_ENV === "development";
   const mockIngredients = {
     foods: [{ id: 1, name: "Filet de poulet" }],
@@ -208,7 +208,7 @@ const AddRecipe = ({
         title: selectedRecipe.title,
         category: selectedRecipe.category,
         nbMeals: selectedRecipe.nbMeals ?? 1,
-        type: selectedRecipe.type ?? "main",
+        type: selectedRecipe.type ?? "dish",
         products: selectedRecipe.products,
       });
     } else {
@@ -272,10 +272,10 @@ const AddRecipe = ({
                 variant="body2"
                 sx={{ mb: 1, textTransform: "uppercase" }}
               >
-                Catégorie :
+                Type :
               </Typography>
               <Select
-                value={formik.values.category}
+                value={formik.values.type}
                 onChange={(e) =>
                   formik.setFieldValue("category", e.target.value)
                 }
@@ -340,15 +340,11 @@ const AddRecipe = ({
               </Typography>
               <Autocomplete
                 multiple
-                options={ingredientsData?.foods}
+                options={ingredientsData}
                 getOptionLabel={(option) => option.name}
                 getOptionKey={(option) => option.id}
                 size="small"
-                value={
-                  Array.isArray(formik.values.products)
-                    ? formik.values.products
-                    : []
-                }
+                value={formik.values.products}
                 onChange={(_, value) => formik.setFieldValue("products", value)}
                 renderInput={(params) => (
                   <TextField
