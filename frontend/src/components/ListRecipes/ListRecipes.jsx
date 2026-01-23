@@ -175,6 +175,7 @@ const AddRecipe = ({
   setSelectedRecipe,
 }) => {
   const { data: ingredients = [], isLoading } = useIngredient();
+  console.log("INGREDIENTS HOOK :", ingredients);
   const isDev = process.env.NODE_ENV === "development";
   const mockIngredients = {
     foods: [{ id: 1, name: "Filet de poulet" }],
